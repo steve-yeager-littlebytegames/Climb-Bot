@@ -9,7 +9,6 @@ import { WriteError } from "mongodb";
 import "../config/passport";
 const request = require("express-validator");
 
-
 /**
  * GET /login
  * Login page.
