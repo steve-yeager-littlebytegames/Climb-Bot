@@ -39,3 +39,4 @@ dist/**/*
 
 # Mongo
 db
+\.env\.example
