@@ -9,10 +9,16 @@ export const getLeagues = async (req: Request, res: Response) => {
 
     const slackClient = new WebClient(SLACK_BOT_TOKEN);
 
-    slackClient.chat.postMessage({
+    await slackClient.chat.postMessage({
         channel: SLACK_CHANNEL_ID,
         text: leagues.map(l => `<${CLIMB_URI}/leagues/home/${l.id}|${l.name}>`).join("\n"),
     })
-        .then(res => console.log("Message set: ", res))
-        .catch(console.error);
+        .then(slackRes => {
+            console.log("Message set: ", slackRes);
+            res.status(200).send();
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).send();
+        });
 };
