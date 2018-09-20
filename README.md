@@ -1,6 +1,6 @@
 # TypeScript Node Starter
 
-[![Dependency Status](https://david-dm.org/Microsoft/TypeScript-Node-Starter.svg)](https://david-dm.org/Microsoft/TypeScript-Node-Starter) [![Build Status](https://travis-ci.org/Microsoft/TypeScript-Node-Starter.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript-Node-Starter) 
+[![Build status](https://dev.azure.com/littlebytegames/Climb-Slack/_apis/build/status/Climb-Slack%20CI)](https://dev.azure.com/littlebytegames/Climb-Slack/_build/latest?definitionId=1)
 
 **Live Demo**: [https://typescript-node-starter.azurewebsites.net/](https://typescript-node-starter.azurewebsites.net/)
 
