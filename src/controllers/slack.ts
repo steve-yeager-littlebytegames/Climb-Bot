@@ -33,6 +33,7 @@ export const postSets = async (req: Request, res: Response) => {
 
     for (let i = 0; i < leagues.length; i++) {
         const sets = await climbClient.getSets(leagues[i].id, targetDate.toDate());
+        sets.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
         if (sets && sets.length > 0) {
             let message = `${leagues[i].name} sets due by ${targetDateString}\n`;

@@ -23,7 +23,7 @@ export class ClimbClient {
     }
 
     async getSets(leagueID: number, dueDate: Date): Promise<SetDto[]> {
-        let sets;
+        const sets = Array<SetDto>();
 
         await axios.get(this.url + "/api/v1/leagues/sets", {
             params: {
@@ -32,7 +32,9 @@ export class ClimbClient {
             }
         })
             .then(response => {
-                sets = <SetDto[]>response.data;
+                for (let i = 0; i < response.data.length; i++) {
+                    sets.push(new SetDto(response.data[i]));
+                }
             })
             .catch(logger.error);
 
