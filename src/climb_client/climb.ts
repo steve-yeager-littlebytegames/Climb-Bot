@@ -1,5 +1,7 @@
 import axios from "axios";
 import { League } from "./models/leagueDto";
+import { SetDto } from "./models/SetDto";
+import logger from "../util/logger";
 
 export class ClimbClient {
     readonly url: string;
@@ -14,10 +16,26 @@ export class ClimbClient {
         await axios.get(this.url + "/api/v1/leagues")
             .then(response => {
                 leagues = <League[]>response.data;
-                console.log(leagues);
             })
-            .catch(console.error);
+            .catch(logger.error);
 
         return leagues;
+    }
+
+    async getSets(leagueID: number, dueDate: Date): Promise<SetDto[]> {
+        let sets;
+
+        await axios.get(this.url + "/api/v1/leagues/sets", {
+            params: {
+                leagueID: leagueID,
+                dueDate: dueDate,
+            }
+        })
+            .then(response => {
+                sets = <SetDto[]>response.data;
+            })
+            .catch(logger.error);
+
+        return sets;
     }
 }
