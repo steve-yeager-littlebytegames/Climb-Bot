@@ -37,7 +37,7 @@ export const postSets = async (req: Request, res: Response) => {
 
         if (sets && sets.length > 0) {
             let message = `${leagues[i].name} sets due by ${targetDateString}\n`;
-            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> ${s.player1ID} v ${s.player2ID} due ${moment(s.dueDate).format("dddd MM/DD")}`).join("\n");
+            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> *${s.player1Name}* v *${s.player2Name}* due _${moment(s.dueDate).format("dddd MM/DD")}_`).join("\n");
 
             await slackClient.chat.postMessage({
                 channel: SLACK_CHANNEL_ID,
