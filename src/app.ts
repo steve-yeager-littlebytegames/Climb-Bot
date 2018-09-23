@@ -62,7 +62,8 @@ function initExpress(mongoUrl: string): void {
 }
 
 function registerRoutes(): void {
-  app.get("/leagues", slackController.getLeagues);
+  app.post("/leagues", slackController.postLeagues);
+  app.post("/sets", slackController.postSets);
 }
 
 function scheduleMessages(): void {
