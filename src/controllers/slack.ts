@@ -25,6 +25,11 @@ export const postLeagues = async (req: Request, res: Response) => {
 };
 
 export const postSets = async (req: Request, res: Response) => {
+    await sendSetReminders();
+    res.status(200).send();
+};
+
+export const sendSetReminders = async () => {
     const climbClient = new ClimbClient(CLIMB_URI);
     const leagues = await climbClient.getAllLeagues();
     const targetDate = moment().add(7, "d");
@@ -47,6 +52,4 @@ export const postSets = async (req: Request, res: Response) => {
             logger.info("No sets found.");
         }
     }
-
-    res.status(200).send();
 };

@@ -71,9 +71,7 @@ function scheduleMessages(): void {
     console.info("Messaging: Power Ranks");
   });
 
-  const availableSetSchedule = schedule.scheduleJob({ hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, () => {
-    console.info("Messaging: Available Sets");
-  });
+  schedule.scheduleJob({ hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, slackController.sendSetReminders);
 }
 
 export default app;
