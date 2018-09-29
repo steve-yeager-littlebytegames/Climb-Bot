@@ -13,6 +13,7 @@ import expressValidator from "express-validator";
 import bluebird from "bluebird";
 import { MONGODB_URI } from "./util/secrets";
 import schedule from "node-schedule";
+import { Request, Response } from "express";
 
 const MongoStore = mongo(session);
 
@@ -64,6 +65,7 @@ function initExpress(mongoUrl: string): void {
 function registerRoutes(): void {
   app.post("/leagues", slackController.postLeagues);
   app.post("/sets", slackController.postSets);
+  app.get("/test", (req: Request, res: Response) => res.status(200).send("Hello World!"));
 }
 
 function scheduleMessages(): void {
