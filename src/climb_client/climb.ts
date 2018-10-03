@@ -22,6 +22,7 @@ export class ClimbClient {
             })
             .catch(error => {
                 logger.error("Couldn't get list of leagues.");
+                logger.error(error);
             });
 
         return leagues;
