@@ -10,19 +10,26 @@ export class ClimbClient {
         this.url = url;
     }
 
-    async getAllLeagues(): Promise<League[]> {
+    async getAllLeagues(): Promise<League[] | null> {
+        logger.info("Getting all leagues.");
+
         let leagues;
 
         await axios.get(this.url + "/api/v1/leagues")
             .then(response => {
                 leagues = <League[]>response.data;
+                logger.info(`Got ${leagues.length} leagues.`);
             })
-            .catch(logger.error);
+            .catch(error => {
+                logger.error("Couldn't get list of leagues.");
+            });
 
         return leagues;
     }
 
-    async getSets(leagueID: number, dueDate: Date): Promise<SetDto[]> {
+    async getSets(leagueID: number, dueDate: Date): Promise<SetDto[] | null> {
+        logger.info(`Getting sets for league ${leagueID} with due date ${dueDate}.`);
+
         const sets = Array<SetDto>();
 
         await axios.get(this.url + "/api/v1/leagues/sets", {
@@ -35,8 +42,12 @@ export class ClimbClient {
                 for (let i = 0; i < response.data.length; i++) {
                     sets.push(new SetDto(response.data[i]));
                 }
+
+                logger.info(`Got ${sets.length} sets.`);
             })
-            .catch(logger.error);
+            .catch(error => {
+                logger.error("Failed to load sets.");
+            });
 
         return sets;
     }

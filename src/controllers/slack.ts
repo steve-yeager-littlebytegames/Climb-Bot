@@ -20,24 +20,38 @@ export const postLeagues = async (req: Request, res: Response) => {
         })
         .catch(error => {
             logger.error(error);
-            res.status(500).send();
+            return res.status(500).send(error);
         });
+
+    res.status(200).send();
 };
 
 export const postSets = async (req: Request, res: Response) => {
-    await sendSetReminders();
+    try {
+        await sendSetReminders();
+    } catch (error) {
+        return res.status(500).send(error);
+    }
     res.status(200).send();
 };
 
 export const sendSetReminders = async () => {
+    logger.info("Sending Slack set reminders.");
+
     const climbClient = new ClimbClient(CLIMB_URI);
     const leagues = await climbClient.getAllLeagues();
+
     const targetDate = moment().add(7, "d");
     const targetDateString = targetDate.format("dddd MM/DD");
     const slackClient = new WebClient(SLACK_BOT_TOKEN);
 
     for (let i = 0; i < leagues.length; i++) {
         const sets = await climbClient.getSets(leagues[i].id, targetDate.toDate());
+        if (!sets) {
+            logger.error(`Couldn't get sets for league ${leagues[i].id}.`);
+            continue;
+        }
+
         sets.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
         if (sets && sets.length > 0) {
