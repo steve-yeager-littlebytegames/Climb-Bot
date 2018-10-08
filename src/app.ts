@@ -22,6 +22,7 @@ dotenv.config({ path: ".env.example" });
 
 // Controllers (route handlers)
 import * as slackController from "./controllers/slack";
+import { JobDto } from "./models/JobDto";
 
 // Create Express server
 const app = express();
@@ -66,14 +67,22 @@ function registerRoutes(): void {
   app.post("/leagues", slackController.postLeagues);
   app.post("/sets", slackController.postSets);
   app.get("/test", (req: Request, res: Response) => res.status(200).send("Hello World!"));
+  app.get("/jobs", (req: Request, res: Response) => res.status(200).json(JobDto.getJobs()));
+  app.post("/jobs/reset", (req: Request, res: Response) => {
+    for (const key in schedule.scheduledJobs) {
+      schedule.cancelJob(key);
+    }
+    scheduleMessages();
+    res.status(200).json(JobDto.getJobs());
+  });
 }
 
 function scheduleMessages(): void {
-  const powerRankSchedule = schedule.scheduleJob({ hour: 10, dayOfWeek: 1 }, () => {
+  schedule.scheduleJob("Power Rankings", { hour: 10, dayOfWeek: 1 }, () => {
     console.info("Messaging: Power Ranks");
   });
 
-  schedule.scheduleJob({ hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, slackController.sendSetReminders);
+  schedule.scheduleJob("Set Reminders", { hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, slackController.sendSetReminders);
 }
 
 export default app;
