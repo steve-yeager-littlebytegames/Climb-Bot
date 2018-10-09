@@ -75,6 +75,16 @@ function registerRoutes(): void {
     scheduleMessages();
     res.status(200).json(JobDto.getJobs());
   });
+  app.post("/jobs/invoke", (req: Request, res: Response) => {
+    const jobName = req.body.jobName;
+    const job = schedule.scheduledJobs[jobName];
+    if (!job) {
+      res.status(404).send(`No job '${jobName}' found.`);
+    } else {
+      job.invoke();
+      res.status(200).send(`Job '${jobName}' invoked.`);
+    }
+  });
 }
 
 function scheduleMessages(): void {
