@@ -16,6 +16,7 @@ export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONG
 export const CLIMB_URI = prod ? process.env["CLIMB_URI"] : process.env["CLIMB_URI_LOCAL"];
 export const SLACK_BOT_TOKEN = process.env["SLACK_BOT_TOKEN"];
 export const SLACK_CHANNEL_ID = process.env["SLACK_CHANNEL_ID"];
+export const SLACK_WEBHOOK = process.env["SLACK_WEBHOOK"];
 
 if (!MONGODB_URI) {
     logger.error("No mongo connection string. Set MONGODB_URI environment variable.");
@@ -34,5 +35,10 @@ if (!SLACK_BOT_TOKEN) {
 
 if (!SLACK_CHANNEL_ID) {
     logger.error("No Slack channel ID. Set SLACK_CHANNEL_ID environment variable.");
+    process.exit(1);
+}
+
+if (!SLACK_WEBHOOK) {
+    logger.error("No Slack webhook. Set SLACK_WEBHOOK environment variable.");
     process.exit(1);
 }
