@@ -23,6 +23,7 @@ dotenv.config({ path: ".env.example" });
 // Controllers (route handlers)
 import * as slackController from "./controllers/slack";
 import { JobDto } from "./models/JobDto";
+import moment = require("moment");
 
 // Create Express server
 const app = express();
@@ -85,6 +86,10 @@ function registerRoutes(): void {
       res.status(200).send(`Job '${jobName}' invoked.`);
     }
   });
+  app.post("/jobs/clear", (req: Request, res: Response) => {
+    lastSetReminder = -1;
+    res.status(200).send(`Job last time run cleared.`);
+  });
 }
 
 function scheduleMessages(): void {
@@ -92,7 +97,30 @@ function scheduleMessages(): void {
     console.info("Messaging: Power Ranks");
   });
 
-  schedule.scheduleJob("Set Reminders", { hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, slackController.sendSetReminders);
+  schedule.scheduleJob("Set Reminders", { hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, sendSetReminders);
+}
+
+let lastSetReminder: number;
+
+async function sendSetReminders(): Promise<void> {
+
+  const today = moment().dayOfYear();
+  if (today == lastSetReminder) {
+    logger.warn("Set reminders have already run today.");
+    return;
+  }
+  lastSetReminder = today;
+
+  logger.info("Sending set reminders.");
+  await slackController.sendSetReminders()
+    .then(() => {
+      logger.info("Sent set reminders.");
+    })
+    .catch(error => {
+      logger.error(`Could not send set reminders.\n${error}`);
+    });
+
+  logger.info("Done sending set reminders.");
 }
 
 export default app;

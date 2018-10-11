@@ -14,8 +14,6 @@ const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 
 export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
 export const CLIMB_URI = prod ? process.env["CLIMB_URI"] : process.env["CLIMB_URI_LOCAL"];
-export const SLACK_BOT_TOKEN = process.env["SLACK_BOT_TOKEN"];
-export const SLACK_CHANNEL_ID = process.env["SLACK_CHANNEL_ID"];
 export const SLACK_WEBHOOK = process.env["SLACK_WEBHOOK"];
 
 if (!MONGODB_URI) {
@@ -25,16 +23,6 @@ if (!MONGODB_URI) {
 
 if (!CLIMB_URI) {
     logger.error("No Climb URI. Set CLIMB_URI environment variable.");
-    process.exit(1);
-}
-
-if (!SLACK_BOT_TOKEN) {
-    logger.error("No Slack bot token. Set SLACK_BOT_TOKEN environment variable.");
-    process.exit(1);
-}
-
-if (!SLACK_CHANNEL_ID) {
-    logger.error("No Slack channel ID. Set SLACK_CHANNEL_ID environment variable.");
     process.exit(1);
 }
 
