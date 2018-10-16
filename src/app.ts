@@ -93,11 +93,11 @@ function registerRoutes(): void {
 }
 
 function scheduleMessages(): void {
-  schedule.scheduleJob("Power Rankings", { hour: 10, dayOfWeek: 1 }, () => {
+  schedule.scheduleJob("Power Rankings", { hour: 17, dayOfWeek: 1 }, () => {
     console.info("Messaging: Power Ranks");
   });
 
-  schedule.scheduleJob("Set Reminders", { hour: 10, dayOfWeek: [1, 2, 3, 4, 5] }, sendSetReminders);
+  schedule.scheduleJob("Set Reminders", { hour: 17, dayOfWeek: [1, 2, 3, 4, 5] }, sendSetReminders);
 }
 
 let lastSetReminder: number;
