@@ -50,7 +50,7 @@ export const sendSetReminders = async () => {
 
         if (sets && sets.length > 0) {
             let message = `${leagues[i].name} sets due by ${targetDateString}\n`;
-            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> *${getPlayerName(s, true)}* v *${getPlayerName(s, false)}* due _${moment(s.dueDate).format("dddd MM/DD")}_`).join("\n");
+            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> *${getPlayerName(s, true, userDB)}* v *${getPlayerName(s, false, userDB)}* due _${moment(s.dueDate).format("dddd MM/DD")}_`).join("\n");
 
             await postMessage(message);
         } else {
@@ -74,7 +74,7 @@ function postMessage(message: string): AxiosPromise<any> {
     return Axios.post(SLACK_WEBHOOK, payload);
 }
 
-function getPlayerName(set: SetDto, isPlayer1: boolean): string {
+function getPlayerName(set: SetDto, isPlayer1: boolean, usersDB: UserDB): string {
     if (isPlayer1) {
         return usersDB.getSlackID(set.user1ID) || set.player1Name;
     }
