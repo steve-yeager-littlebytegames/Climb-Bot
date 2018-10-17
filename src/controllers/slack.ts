@@ -4,6 +4,10 @@ import { CLIMB_URI, SLACK_WEBHOOK } from "../util/secrets";
 import logger from "../util/logger";
 import moment from "moment";
 import Axios, { AxiosPromise } from "axios";
+import { UserDB } from "../models/UserDB";
+import { SetDto } from "../climb_client/models/SetDto";
+import fs from "fs";
+import path from "path";
 
 export const postLeagues = async (req: Request, res: Response) => {
     const climbClient = new ClimbClient(CLIMB_URI);
@@ -33,6 +37,8 @@ export const sendSetReminders = async () => {
     const targetDate = moment().add(7, "d");
     const targetDateString = targetDate.format("dddd MM/DD");
 
+    const userDB = createUserDB();
+
     for (let i = 0; i < leagues.length; i++) {
         const sets = await climbClient.getSets(leagues[i].id, targetDate.toDate());
         if (!sets) {
@@ -44,7 +50,7 @@ export const sendSetReminders = async () => {
 
         if (sets && sets.length > 0) {
             let message = `${leagues[i].name} sets due by ${targetDateString}\n`;
-            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> *${s.player1Name}* v *${s.player2Name}* due _${moment(s.dueDate).format("dddd MM/DD")}_`).join("\n");
+            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> *${getPlayerName(s, true)}* v *${getPlayerName(s, false)}* due _${moment(s.dueDate).format("dddd MM/DD")}_`).join("\n");
 
             await postMessage(message);
         } else {
@@ -53,10 +59,25 @@ export const sendSetReminders = async () => {
     }
 };
 
+function createUserDB(): UserDB {
+    const userDataPath = path.resolve(__dirname, "..\\..\\users.json");
+    const usersList = fs.readFileSync(userDataPath, "utf8");
+    const usersDB = UserDB.Create(JSON.parse(usersList));
+    return usersDB;
+}
+
 function postMessage(message: string): AxiosPromise<any> {
     const payload = {
         "text": message,
     };
 
     return Axios.post(SLACK_WEBHOOK, payload);
+}
+
+function getPlayerName(set: SetDto, isPlayer1: boolean): string {
+    if (isPlayer1) {
+        return usersDB.getSlackID(set.user1ID) || set.player1Name;
+    }
+
+    return usersDB.getSlackID(set.user2ID) || set.player2Name;
 }

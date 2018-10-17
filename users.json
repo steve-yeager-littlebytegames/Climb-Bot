@@ -1,0 +1,144 @@
+{
+    "users": [
+        {
+            "name": "KobeBeefer",
+            "slack": "W7HLU195Y",
+            "climb": "d6c3e21bb9d8"
+        },
+        {
+            "name": "Kit",
+            "slack": "W7H6D0VMF",
+            "climb": "234d8617-4bf7-4f52-81ea-cfad0ddf88c2"
+        },
+        {
+            "name": "samantha",
+            "slack": "W9DFURNLU",
+            "climb": "24e4fd5b-f1bb-4367-b19d-ba4e6193b184"
+        },
+        {
+            "name": "Gungnir",
+            "slack": "W7JQKBG6T",
+            "climb": "3d05c65b-0f3e-4d05-821c-403f53c50adf"
+        },
+        {
+            "name": "freshfineapple",
+            "slack": "W9TAMT6F6",
+            "climb": "4c10c04d-f26e-40e0-8bfb-362a53629f8b"
+        },
+        {
+            "name": "ColdCoffee",
+            "slack": "W9RF74DUJ",
+            "climb": "5ccda113-6a61-4e54-82b2-8c5274afe4c6"
+        },
+        {
+            "name": "digivava",
+            "slack": "WC43XHSRF",
+            "climb": "62b97df2-a25e-4c37-a9de-8d0bfc864283"
+        },
+        {
+            "name": "tgong",
+            "slack": "W7H0JSA3A",
+            "climb": "67323438-6a77-4a41-8314-42cc3ecefa8a"
+        },
+        {
+            "name": "Nate",
+            "slack": "W7H2CEYJC",
+            "climb": "68d58c0d-2887-4905-8303-a8cdfc1236cb"
+        },
+        {
+            "name": "juskelis",
+            "slack": "WBYGP417Y",
+            "climb": "7921f6c8-b421-49b2-b228-37b32903faf3"
+        },
+        {
+            "name": "uzbeckus",
+            "slack": "W9SGNUEVD",
+            "climb": "9b5124f9-c0ee-4827-bd2b-4764e5552771"
+        },
+        {
+            "name": "k8-kreinhard",
+            "slack": "WBN9PV067",
+            "climb": "9bb3a710-fe24-4176-8293-dc44600f7aa9"
+        },
+        {
+            "name": "mkellner",
+            "slack": "W7HKSNV1A",
+            "climb": "a133d9d2-7273-44c4-903c-735afd9ea7f9"
+        },
+        {
+            "name": "LiquidSnow",
+            "slack": "W7HJYB28L",
+            "climb": "aa725770-a8ae-4c31-b411-d1a5c5e5a37f"
+        },
+        {
+            "name": "Faelken",
+            "slack": "W7HJJA76Y",
+            "climb": "ad36f972-36e4-40ac-82e4-07f18848426f"
+        },
+        {
+            "name": "Mando_Magic",
+            "slack": "W7JP394MD",
+            "climb": "ae5775a3-af6f-44b4-b2fb-6068126237fd"
+        },
+        {
+            "name": "ECMattFight",
+            "slack": "W7GSG269W",
+            "climb": "d26efaaf-6610-46d9-a54a-fc175ec148d3"
+        },
+        {
+            "name": "Blooregard",
+            "slack": "W7HLZDYQJ",
+            "climb": "d7eebc33-f6cf-4bb3-9bbb-24a1285a8bdc"
+        },
+        {
+            "name": "Scarlett",
+            "slack": "W7JDASXB8",
+            "climb": "dac1f874-78a2-4efd-b052-97deeadcba0c"
+        },
+        {
+            "name": "Zardoz5",
+            "slack": "W7HPHHAKE",
+            "climb": "deabab55-a72d-4819-94b2-d36d788b2c66"
+        },
+        {
+            "name": "saraphimknight",
+            "slack": "W7HR6NEMB",
+            "climb": "dfbd88cb-0bf7-42a1-afb6-323798889119"
+        },
+        {
+            "name": "jsola_",
+            "slack": "W7HJ3UF6X",
+            "climb": "e1dcc87b-da43-4303-ab52-6b6e4baaff5f"
+        },
+        {
+            "name": "Kertesz",
+            "slack": "W7HFZPE1Y",
+            "climb": "ed1c4061-ba53-4d6f-8e16-104582b146fc"
+        },
+        {
+            "name": "Necro_Mantooth",
+            "slack": "W7HS6C0H3",
+            "climb": "f7f3313d-3ca8-48a8-9db9-361a8f0eea65"
+        },
+        {
+            "name": "randyknapp",
+            "slack": "W7H5D895F",
+            "climb": "f8b80dcf-1136-4602-85b7-b597068989a6"
+        },
+        {
+            "name": "BrightThunder",
+            "slack": "W7HKHJYLT",
+            "climb": "915b0cca-a0f9-410a-ac18-1c62fc785137"
+        },
+        {
+            "name": "rebooooo",
+            "slack": "W7H223CQG",
+            "climb": "d94bf709-9136-4403-8265-0d42aa50f1e7"
+        },
+        {
+            "name": "akobylarek",
+            "slack": "W7H6S98L9",
+            "climb": "751debab-9b25-43fa-a299-706914990736"
+        }
+    ]
+}
