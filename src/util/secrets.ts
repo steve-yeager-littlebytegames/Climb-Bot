@@ -2,30 +2,31 @@ import logger from "./logger";
 import dotenv from "dotenv";
 import fs from "fs";
 
-if (fs.existsSync(".env")) {
-    logger.debug("Using .env file to supply config environment variables");
-    dotenv.config({ path: ".env" });
-} else {
-    logger.debug("Using .env.example file to supply config environment variables");
-    dotenv.config({ path: ".env.example" });  // you can delete this after you create your own .env file!
-}
 export const ENVIRONMENT = process.env.NODE_ENV;
-const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 
-export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
-export const CLIMB_URI = prod ? process.env["CLIMB_URI"] : process.env["CLIMB_URI_LOCAL"];
-export const SLACK_WEBHOOK = process.env["SLACK_WEBHOOK"];
+const configPath = `.env.${ENVIRONMENT}`;
+
+if (fs.existsSync(configPath)) {
+    logger.info(`Using ${configPath} file to supply config environment variables`);
+    dotenv.config({ path: configPath });
+} else {
+    logger.info(`No .env config file found at ${configPath}.`);
+}
+
+export const MONGODB_URI = process.env["MONGODB_URI"];
 
 if (!MONGODB_URI) {
     logger.error("No mongo connection string. Set MONGODB_URI environment variable.");
     process.exit(1);
 }
 
+export const CLIMB_URI = process.env["CLIMB_URI"];
 if (!CLIMB_URI) {
     logger.error("No Climb URI. Set CLIMB_URI environment variable.");
     process.exit(1);
 }
 
+export const SLACK_WEBHOOK = process.env["SLACK_WEBHOOK"];
 if (!SLACK_WEBHOOK) {
     logger.error("No Slack webhook. Set SLACK_WEBHOOK environment variable.");
     process.exit(1);
