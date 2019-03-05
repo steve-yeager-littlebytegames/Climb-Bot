@@ -139,6 +139,21 @@
             "name": "akobylarek",
             "slack": "W7H6S98L9",
             "climb": "751debab-9b25-43fa-a299-706914990736"
+        },
+        {
+            "name": "agann",
+            "slack": "W7H13LLRF",
+            "climb": "657cc49f-5eb2-44de-a262-88d6a007d0f4"
+        },
+        {
+            "name": "mmulhall",
+            "slack": "WAVHMPZEK",
+            "climb": "466f9fc3-00f1-4634-b617-a2c910daf498"
+        },
+        {
+            "name": "sbeattie",
+            "slack": "W96SMKNRY",
+            "climb": "251cd1f4-9bf5-47e6-bf07-080e6edebe7a"
         }
     ]
 }
