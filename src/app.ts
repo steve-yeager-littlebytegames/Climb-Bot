@@ -97,7 +97,7 @@ function scheduleMessages(): void {
     console.info("Messaging: Power Ranks");
   });
 
-  schedule.scheduleJob("Set Reminders", { hour: 17, dayOfWeek: [1, 2, 3, 4, 5] }, sendSetReminders);
+  schedule.scheduleJob("Set Reminders", { hour: 17, dayOfWeek: [1, 4] }, sendSetReminders);
 }
 
 let lastSetReminder: number;
