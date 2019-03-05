@@ -5,13 +5,12 @@ import logger from "../util/logger";
 import moment from "moment";
 import Axios, { AxiosPromise } from "axios";
 import { UserDB } from "../models/UserDB";
-import { SetDto } from "../climb_client/models/SetDto";
 import fs from "fs";
 import path from "path";
 
 export const postLeagues = async (req: Request, res: Response) => {
-    const climbClient = new ClimbClient(CLIMB_URI);
-    const leagues = await climbClient.getAllLeagues();
+    const leagueApi = new ClimbClient.LeagueApi(CLIMB_URI);
+    const leagues = await leagueApi.getAll();
 
     const message = leagues.map(l => `<${CLIMB_URI}/leagues/home/${l.id}|${l.name}>`).join("\n");
     await postMessage(message);
@@ -31,8 +30,8 @@ export const postSets = async (req: Request, res: Response) => {
 export const sendSetReminders = async () => {
     logger.info("Sending Slack set reminders.");
 
-    const climbClient = new ClimbClient(CLIMB_URI);
-    const leagues = await climbClient.getAllLeagues();
+    const leagueApi = new ClimbClient.LeagueApi(CLIMB_URI);
+    const leagues = await leagueApi.getAll();
 
     const targetDate = moment().add(7, "d");
     const targetDateString = targetDate.format("dddd MM/DD");
@@ -40,7 +39,7 @@ export const sendSetReminders = async () => {
     const userDB = createUserDB();
 
     for (let i = 0; i < leagues.length; i++) {
-        const sets = await climbClient.getSets(leagues[i].id, targetDate.toDate());
+        const sets = await leagueApi.sets(leagues[i].id, targetDate.toDate());
         if (!sets) {
             logger.error(`Couldn't get sets for league ${leagues[i].id}.`);
             continue;
@@ -74,7 +73,7 @@ function postMessage(message: string): AxiosPromise<any> {
     return Axios.post(SLACK_WEBHOOK, payload);
 }
 
-function getPlayerName(set: SetDto, isPlayer1: boolean, usersDB: UserDB): string {
+function getPlayerName(set: ClimbClient.SetDto, isPlayer1: boolean, usersDB: UserDB): string {
     if (isPlayer1) {
         return usersDB.getSlackID(set.user1ID) || set.player1Name;
     }
