@@ -58,6 +58,32 @@ export const sendSetReminders = async () => {
     }
 };
 
+export const sendCompletedSetsAsync = async () => {
+    logger.info("Sending completed sets to Slack.");
+
+    const leagueApi = new ClimbClient.LeagueApi(CLIMB_URI);
+    const leagues = await leagueApi.getAll();
+
+    const userDB = createUserDB();
+
+    const targetDate = moment().add(7, "d").toDate();
+
+    for (let i = 0; i < leagues.length; i++) {
+        const completedSets = await leagueApi.getCompletedSets(leagues[i].id, targetDate);
+
+        if (completedSets.length > 0) {
+            for (let j = 0; j < completedSets.length; j++) {
+                const set = completedSets[j];
+                const message = `<${CLIMB_URI}/sets/fight/${set.id}|Details> *${getPlayerName(set, true, userDB)}* ${set.player1Score} - ${set.player2Score} *${getPlayerName(set, false, userDB)}*`;
+
+                await postMessage(message);
+            }
+        } else {
+            logger.info(`No sets for league ${leagues[i].id}.`);
+        }
+    }
+};
+
 function createUserDB(): UserDB {
     const userDataPath = path.resolve(__dirname, "..\\..\\users.json");
     const usersList = fs.readFileSync(userDataPath, "utf8");
