@@ -65,6 +65,7 @@ function initExpress(mongoUrl: string): void {
 }
 
 function registerRoutes(): void {
+  app.post("/completed-sets", slackController.postCompletedSets);
   app.post("/leagues", slackController.postLeagues);
   app.post("/sets", slackController.postSets);
   app.get("/test", (req: Request, res: Response) => res.status(200).send("Hello World!"));
@@ -98,12 +99,13 @@ function scheduleMessages(): void {
   });
 
   schedule.scheduleJob("Set Reminders", { hour: 17, dayOfWeek: [1, 4] }, sendSetReminders);
+
+  schedule.scheduleJob("Completed Sets", { dayOfWeek: [1, 2, 3, 4, 5] }, sendCompletedSets);
 }
 
 let lastSetReminder: number;
 
 async function sendSetReminders(): Promise<void> {
-
   const today = moment().dayOfYear();
   if (today == lastSetReminder) {
     logger.warn("Set reminders have already run today.");
@@ -121,6 +123,17 @@ async function sendSetReminders(): Promise<void> {
     });
 
   logger.info("Done sending set reminders.");
+}
+
+async function sendCompletedSets(): Promise<void> {
+  logger.info("Checking for completed sets.");
+  await slackController.sendCompletedSetsAsync(1)
+    .then(() => {
+      logger.info("Done checking for completed sets.");
+    })
+    .catch(error => {
+      logger.error(`Could not check for completed sets.\n${error}`);
+    });
 }
 
 export default app;
