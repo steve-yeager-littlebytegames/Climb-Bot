@@ -65,6 +65,7 @@ function initExpress(mongoUrl: string): void {
 }
 
 function registerRoutes(): void {
+  app.post("/completed-sets", slackController.postCompletedSets);
   app.post("/leagues", slackController.postLeagues);
   app.post("/sets", slackController.postSets);
   app.get("/test", (req: Request, res: Response) => res.status(200).send("Hello World!"));
@@ -126,7 +127,7 @@ async function sendSetReminders(): Promise<void> {
 
 async function sendCompletedSets(): Promise<void> {
   logger.info("Checking for completed sets.");
-  await slackController.sendCompletedSetsAsync()
+  await slackController.sendCompletedSetsAsync(1)
     .then(() => {
       logger.info("Done checking for completed sets.");
     })
