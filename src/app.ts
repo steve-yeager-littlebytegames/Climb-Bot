@@ -100,7 +100,7 @@ function scheduleMessages(): void {
 
   schedule.scheduleJob("Set Reminders", { hour: 17, dayOfWeek: [1, 4] }, sendSetReminders);
 
-  schedule.scheduleJob("Completed Sets", { dayOfWeek: [1, 2, 3, 4, 5] }, sendCompletedSets);
+  schedule.scheduleJob("Completed Sets", { minute: 0, dayOfWeek: [1, 2, 3, 4, 5] }, sendCompletedSets);
 }
 
 let lastSetReminder: number;
