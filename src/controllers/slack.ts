@@ -48,10 +48,14 @@ export const sendSetReminders = async () => {
         sets.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
         if (sets && sets.length > 0) {
-            let message = `${leagues[i].name} sets due by ${targetDateString}\n`;
-            message += sets.map(s => `<${CLIMB_URI}/sets/fight/${s.id}|Fight> *${getPlayerName(s, true, userDB)}* v *${getPlayerName(s, false, userDB)}* due _${moment(s.dueDate).format("dddd MM/DD")}_`).join("\n");
-
+            const message = `*${leagues[i].name} sets due by ${targetDateString}*\n`;
             await postMessage(message);
+
+            for (let i = 0; i < sets.length; i++) {
+                const set = sets[i];
+                const message = `<${CLIMB_URI}/sets/fight/${set.id}|Fight> *${getPlayerName(set, true, userDB)}* v *${getPlayerName(set, false, userDB)}* due _${moment(set.dueDate).format("dddd MM/DD")}_`;
+                await postMessage(message);
+            }
         } else {
             logger.info("No sets found.");
         }
