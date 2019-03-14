@@ -27,6 +27,18 @@ export const postSets = async (req: Request, res: Response) => {
     res.status(200).send();
 };
 
+export const postCompletedSets = async (req: Request, res: Response) => {
+    try {
+        // TODO: Get hours from request.
+        const hours = 1;
+
+        await sendCompletedSetsAsync(hours);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+    res.status(200).send();
+};
+
 export const sendSetReminders = async () => {
     logger.info("Sending Slack set reminders.");
 
@@ -58,6 +70,35 @@ export const sendSetReminders = async () => {
             }
         } else {
             logger.info("No sets found.");
+        }
+    }
+};
+
+export const sendCompletedSetsAsync = async (hours: number) => {
+    logger.info("Sending completed sets to Slack.");
+
+    const leagueApi = new ClimbClient.LeagueApi(CLIMB_URI);
+    const leagues = await leagueApi.getAll();
+
+    const userDB = createUserDB();
+
+    const targetDate = moment().subtract(hours, "h").toDate();
+
+    for (let i = 0; i < leagues.length; i++) {
+        const league = leagues[i];
+        const completedSets = await leagueApi.getCompletedSets(league.id, targetDate);
+
+        if (completedSets.length > 0) {
+            await postMessage(`*${league.name} Completed Sets*`);
+
+            for (let j = 0; j < completedSets.length; j++) {
+                const set = completedSets[j];
+                const message = `<${CLIMB_URI}/sets/fight/${set.id}|Details> *${getPlayerName(set, true, userDB)}* ${set.player1Score} - ${set.player2Score} *${getPlayerName(set, false, userDB)}*`;
+
+                await postMessage(message);
+            }
+        } else {
+            logger.info(`No sets for league ${league.id}.`);
         }
     }
 };
