@@ -40,38 +40,42 @@ export const postCompletedSets = async (req: Request, res: Response) => {
 };
 
 export const sendSetReminders = async () => {
-    logger.info("Sending Slack set reminders.");
+    logger.info("---Start: Sending Slack Reminders");
 
     const leagueApi = new ClimbClient.LeagueApi(CLIMB_URI);
     const leagues = await leagueApi.getAll();
 
-    const targetDate = moment().add(7, "d");
+    const targetDate = moment().utc().add(7, "d");
     const targetDateString = targetDate.format("dddd MM/DD");
 
     const userDB = createUserDB();
 
     for (let i = 0; i < leagues.length; i++) {
-        const sets = await leagueApi.sets(leagues[i].id, targetDate.toDate());
+        const league = leagues[i];
+        const sets = await leagueApi.sets(league.id, targetDate.toDate());
         if (!sets) {
-            logger.error(`Couldn't get sets for league ${leagues[i].id}.`);
+            logger.error(`Couldn't get sets for league ${leagues[i].name}.`);
             continue;
         }
 
         sets.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
         if (sets && sets.length > 0) {
-            const message = `*${leagues[i].name} sets due by ${targetDateString}*\n`;
+            const message = `*${league.name} sets due by ${targetDateString}*\n`;
             await postMessage(message);
 
+            logger.info(`Sending ${sets.length} for league '${league.name}'.`);
             for (let i = 0; i < sets.length; i++) {
                 const set = sets[i];
                 const message = `<${CLIMB_URI}/sets/fight/${set.id}|Fight> *${getPlayerName(set, true, userDB)}* v *${getPlayerName(set, false, userDB)}* due _${moment(set.dueDate).format("dddd MM/DD")}_`;
                 await postMessage(message);
             }
         } else {
-            logger.info("No sets found.");
+            logger.info(`No sets found for league '${league.name}'.`);
         }
     }
+
+    logger.info("-----End: Sending Slack Reminders");
 };
 
 export const sendCompletedSetsAsync = async (hours: number) => {
