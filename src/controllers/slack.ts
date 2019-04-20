@@ -3,6 +3,7 @@ import { ClimbClient } from "../climb_client/climb";
 import { CLIMB_URI, SLACK_WEBHOOK } from "../util/secrets";
 import logger from "../util/logger";
 import moment from "moment";
+import "moment-timezone";
 import Axios, { AxiosPromise } from "axios";
 import { UserDB } from "../models/UserDB";
 import fs from "fs";
@@ -46,7 +47,7 @@ export const sendSetReminders = async () => {
     const leagues = await leagueApi.getAll();
 
     const targetDate = moment().utc().add(7, "d");
-    const targetDateString = targetDate.format("dddd MM/DD");
+    const targetDateString = targetDate.tz("America/Los_Angeles").format("dddd MM/DD");
 
     const userDB = createUserDB();
 
