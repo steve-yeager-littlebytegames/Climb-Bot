@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 
 export const ENVIRONMENT = process.env.NODE_ENV ? process.env.NODE_ENV : "local";
+console.log(ENVIRONMENT);
 
 const configPath = `.env.${ENVIRONMENT}`;
 

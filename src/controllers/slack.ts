@@ -35,6 +35,7 @@ export const postCompletedSets = async (req: Request, res: Response) => {
 
         await sendCompletedSetsAsync(hours);
     } catch (error) {
+        logger.error(`Failed to send completed sets! Error: ${JSON.stringify(error)}`);
         return res.status(500).send(error);
     }
     res.status(200).send();
@@ -53,26 +54,30 @@ export const sendSetReminders = async () => {
 
     for (let i = 0; i < leagues.length; i++) {
         const league = leagues[i];
-        const sets = await leagueApi.sets(league.id, targetDate.toDate());
-        if (!sets) {
-            logger.error(`Couldn't get sets for league ${leagues[i].name}.`);
-            continue;
-        }
-
-        sets.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-
-        if (sets && sets.length > 0) {
-            const message = `*${league.name} sets due by ${targetDateString}*\n`;
-            await postMessage(message);
-
-            logger.info(`Sending ${sets.length} for league '${league.name}'.`);
-            for (let i = 0; i < sets.length; i++) {
-                const set = sets[i];
-                const message = `<${CLIMB_URI}/sets/fight/${set.id}|Fight> *${getPlayerName(set, true, userDB)}* v *${getPlayerName(set, false, userDB)}* due _${moment(set.dueDate).format("dddd MM/DD")}_`;
-                await postMessage(message);
+        try {
+            const sets = await leagueApi.sets(league.id, targetDate.toDate());
+            if (!sets) {
+                logger.error(`Couldn't get sets for league ${leagues[i].name}.`);
+                continue;
             }
-        } else {
-            logger.info(`No sets found for league '${league.name}'.`);
+
+            sets.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+
+            if (sets && sets.length > 0) {
+                const message = `*${league.name} sets due by ${targetDateString}*\n`;
+                await postMessage(message);
+
+                logger.info(`Sending ${sets.length} for league '${league.name}'.`);
+                for (let i = 0; i < sets.length; i++) {
+                    const set = sets[i];
+                    const message = `<${CLIMB_URI}/sets/fight/${set.id}|Fight> *${getPlayerName(set, true, userDB)}* v *${getPlayerName(set, false, userDB)}* due _${moment(set.dueDate).format("dddd MM/DD")}_`;
+                    await postMessage(message);
+                }
+            } else {
+                logger.info(`No sets found for league '${league.name}'.`);
+            }
+        } catch (exception) {
+            logger.error(`Could not get/send sets for league '${league.name}' because of error: ${exception}`);
         }
     }
 
